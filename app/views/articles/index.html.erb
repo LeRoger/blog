@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+
+<div class="container">
+
+<h1>Roger's Blog</h1>
+
+  <%= form_tag(articles_path, :method => "get", id: "search-form") do %>
+    <%= text_field_tag :search, params[:search], placeholder: "Search article title" %>
+    <%= submit_tag "Search", :name => nil %>
+  <% end %>
+
+<br>
+
+<% if @articles.blank? %>
+  <h4>There are no articles containing the term <%= params[:search] %>.</h4>
+<% end %>
+
+<div class="row">
+  <div class="col-sm-8">
+
+    <% @articles.each do |article| %>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title"><%= article.title %></h5>
+          <p class="card-text"><%= @markdown.render(article.body).html_safe %></p>
+          <%= link_to 'Edit', edit_article_path(article), class: "btn btn-primary" %>
+          <%= link_to 'Delete', article_path(article), method: :delete,
+              data: { confirm: 'Are you sure?' }, class: "btn btn-primary" %>
+          <br>  <br>
+          <p class="card-text"> <%= "Created: " + article.created_at.to_s %></p>
+        </div>
+      </div>
+      <br> 
+    <%end%>
+
+  </div>
+</div>
+
+<%= link_to 'New Article', new_article_path %>
+</div>
+
+
+
